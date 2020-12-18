@@ -75,16 +75,19 @@ def run():
 
     _, correct_d, predict_data_t  = model.train_predict(real_data)
 
-
     #print(correct_d)
     print("Real_data")
     print(real_data) # real_data
+    #print(len(real_data))
+    #print(len(real_data[1:]))
 
     print("")
     print("")
+    #print(correct_d)
 
     print("Predict_data")
     print(predict_data_t)
+
 
 
 

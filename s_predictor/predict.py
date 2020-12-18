@@ -448,6 +448,7 @@ class Model():
         # to get c
         c, w = 0, 0
         for i in range(len(self.total)-1):
+            
             if self.total[i] == real_data[i] and self.total[i]==True:
                 c += 1
 

@@ -128,22 +128,33 @@ class stock_util(object):
 
         predict_dato = self.make_bool(predict[:-1])
         real_dato = self.make_bool(real)
-        total_up = real_dato[0]
 
-        if predict_dato[0] < real_dato[0]:
+        real_dato_0 = real_dato[0]
+        predict_dato_0 = predict_dato[0]
 
-            total_up +=  (real_dato[0] - predict_dato[0])
+        total_up = real_dato_0
+
+
+        if predict_dato_0 < real_dato_0:
+
+            total_up +=  (real_dato_0 - predict_dato_0)
 
         else:
-            total_up += (predict_dato[0] - real_dato[0])
+            total_up += (predict_dato_0 - real_dato_0)
 
-        data = [total_up, correct_d] # bool(0) == False
+        #correct_d = correct_d+2
+
+
+
+        data = [correct_d, total_up-correct_d] # bool(0) == False
 
         #plot
-        label = f'True : {correct_d}', f'False: {data[0]}'
+        label = f'True: {data[0]}', f'False: {data[1]}'
         explode = (0.1, 0)
-        plt.title("The Percentage of Up in The Target Stock (4 months)")
-        plt.pie(data,labels=label,explode=explode, autopct='%1.1f%%',startangle=90)
+        colors = ['#99ff99','#ff9999','#66b3ff','#ffcc99']
+
+        plt.title(f"The Percentage of Up in The Target Stock (4 months): {total_up}")
+        plt.pie(data,labels=label,explode=explode, autopct='%1.1f%%', colors= colors, startangle=90)
 
 
         if int(predict[-1]) == 0:
@@ -153,4 +164,5 @@ class stock_util(object):
 
 
         plt.legend()
+
         plt.show()
