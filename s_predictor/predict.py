@@ -1,7 +1,8 @@
 import numpy as np
 
 class Model():
-    def __init__(self, stock, dow, index, vix, mini_dow):
+    def __init__(self, real_data, stock, dow, index, vix, mini_dow):
+        self.real_data = real_data
         self.stock = stock
         self.dow = dow
         self.index = index
@@ -47,7 +48,7 @@ class Model():
 
 
         ####
-        self.ind_t = np.zeros(len(self.stock_data))
+        self.ind_t = np.zeros(len(self.real_data))
         # index 4 - > 3
 
         self.index_1_test = [self.stock_data, self.index_close_up, self.stock_open_y_up, self.vix_open_y_up]
@@ -59,7 +60,7 @@ class Model():
 
 
         ####
-        self.vol_t = np.zeros(len(self.stock_data))
+        self.vol_t = np.zeros(len(self.real_data))
         # Vol T, F
 
         self.vol_1_set = [self.stock_data, self.stock_open_y_up,self.dow_open_y_up,
@@ -83,7 +84,7 @@ class Model():
 
 
         ####
-        self.dum_t = np.zeros(len(self.stock_data))
+        self.dum_t = np.zeros(len(self.real_data))
 
         # dummy1
         #self.x_test[z-2][i] == self.x_test[z-1][i] == self.x_test[z][i]== self.x_test[n+z][i] == False and (self.mu[i]-self.stock_price[i]) <=10
@@ -108,15 +109,15 @@ class Model():
 
         ###########testing data
         #np.insert(self.stock_data, 0, 9., axis=0)
-        self.test = np.zeros(len(self.stock_data)) # dummy
+        self.test = np.zeros(len(self.real_data)) # dummy
 
-        self.result = np.zeros(len(self.stock_data)) # training data
+        self.result = np.zeros(len(self.real_data)) # training data
 
-        self.real = np.zeros(len(self.stock_data))
-        self.correct = np.zeros(len(self.stock_data))
+        self.real = np.zeros(len(self.real_data))
+        self.correct = np.zeros(len(self.real_data))
 
         # total
-        self.total = np.zeros(len(self.stock_data))
+        self.total = np.zeros(len(self.real_data))
 
     def predict_4_one(self, data, Max1_array=[], switch = False, mu_big = True, Minus1_array=[], B1_n=0, Max2_array=[], Minus2_array=[], B2_n=0):
 
@@ -234,14 +235,14 @@ class Model():
         return self.ind_t
 
 
-    def train_predict(self, real_data):
-        dummy_t = np.zeros(len(self.stock_data))
-        dummy_1 = np.zeros(len(self.stock_data))
-        dummy_2 = np.zeros(len(self.stock_data))
+    def train_predict(self):
+        dummy_t = np.zeros(len(self.real_data))
+        dummy_1 = np.zeros(len(self.real_data))
+        dummy_2 = np.zeros(len(self.real_data))
 
         ## from 3 not self
-        dummy_3 = np.zeros(len(self.stock_data))
-        dummy_4 = np.zeros(len(self.stock_data))
+        dummy_3 = np.zeros(len(self.real_data))
+        dummy_4 = np.zeros(len(self.real_data))
 
         #predict_4_one(self, data, Max1_array=[],Minus1_array, B1_n=0, B1 = False, Max2_array=[], Minus2_array, B2_n=0, B2 = False)
         #max1 = [Max1_array[i] > B1_n for i in range(len(Max1_array))]
@@ -272,7 +273,7 @@ class Model():
         z = 2
         while len(self.vol_1_set) > z:
             for n in reversed(range(len(self.vol_1_set[:z-1:-1]))):
-                for i in range(len(self.stock_data)):
+                for i in range(len(self.real_data)):
                     if self.stock_price[i] > self.mu[i] and self.stock_vol[i] < 0:
                         if self.vol_1_set[z-2][i] == self.vol_1_set[z-1][i] == self.vol_1_set[z][i]== self.vol_1_set[n+z][i] == True and (self.mu[i]-self.stock_price[i]) <=10:
 
@@ -288,7 +289,7 @@ class Model():
         z = 2
         while len(self.vol_2_set) > z:
             for n in reversed(range(len(self.vol_2_set[:z-1:-1]))):
-                for i in range(len(self.stock_data)):
+                for i in range(len(self.real_data)):
                     if self.stock_price[i] > self.mu[i] and self.stock_vol[i] > 0:
                         if self.vol_2_set[z-2][i] == self.vol_2_set[z-1][i] == self.vol_2_set[z][i]== self.vol_2_set[n+z][i] == True and (self.mu[i]-self.stock_price[i]) <=10:
 
@@ -301,7 +302,7 @@ class Model():
         z = 2
         while len(self.vix_set) > z:
             for n in reversed(range(len(self.vix_set[:z-1:-1]))):
-                for i in range(len(self.stock_data)):
+                for i in range(len(self.real_data)):
                     if self.stock_price[i] > self.mu[i] and self.vix_per[i] >-4:
                         if self.vix_set[z-2][i] == self.vix_set[z-1][i] == self.vix_set[z][i]== self.vix_set[n+z][i] == True and (self.mu[i]-self.stock_price[i]) <=10:
 
@@ -321,7 +322,7 @@ class Model():
         z = 2
         while len(self.dum_t) > z:
             for n in reversed(range(len(self.dum_t[:z-1:-1]))):
-                for i in range(len(self.stock_data)):
+                for i in range(len(self.real_data)):
                     if self.stock_price[i] < self.mu[i]:
                         if self.dum_t[z-2][i] == self.dum_t[z-1][i] == self.dum_t[z][i]== self.dum_t[n+z][i] == False and (self.mu[i]-self.stock_price[i]) <=10:
 
@@ -337,7 +338,7 @@ class Model():
         z = 2
         while len(self.dum_tt) > z:
             for n in reversed(range(len(self.dum_tt[:z-1:-1]))):
-                for i in range(len(self.stock_data)):
+                for i in range(len(self.real_data)):
                     if self.stock_price[i] > self.mu[i]:
                         if self.dum_tt[z-2][i] == self.dum_tt[z-1][i] == self.dum_tt[z][i]== self.dum_tt[n+z][i] == False and (self.mu[i]-self.stock_price[i]) <=10:
 
@@ -353,7 +354,7 @@ class Model():
         z = 2
         while len(self.x_test) > z:
             for n in reversed(range(len(self.x_test[:z-1:-1]))):
-                for i in range(len(self.stock_data)):
+                for i in range(len(self.real_data)):
                     if self.stock_price[i] < self.mu[i]:
                         if self.x_test[z-2][i] == self.x_test[z-1][i] == self.x_test[z][i]== self.x_test[n+z][i] == False and (self.mu[i]-self.stock_price[i]) <=5:
 
@@ -374,7 +375,7 @@ class Model():
         z = 2
         while len(self.dum_t) > z:
             for n in reversed(range(len(self.dum_t[:z-1:-1]))):
-                for i in range(len(self.stock_data)):
+                for i in range(len(self.real_data)):
                     if self.stock_price[i] < self.mu[i]:
                         if self.dum_t[z-2][i] == self.dum_t[z-1][i] == self.dum_t[z][i]== self.dum_t[n+z][i] == False:
 
@@ -390,7 +391,7 @@ class Model():
         z = 2
         while len(self.dum_tt) > z:
             for n in reversed(range(len(self.dum_tt[:z-1:-1]))):
-                for i in range(len(self.stock_data)):
+                for i in range(len(self.real_data)):
                     if self.stock_price[i] > self.mu[i]:
                         if self.dum_tt[z-2][i] == self.dum_tt[z-1][i] == self.dum_tt[z][i]== self.dum_tt[n+z][i] == False:
 
@@ -406,7 +407,7 @@ class Model():
         z = 2
         while len(self.x_test) > z:
             for n in reversed(range(len(self.x_test[:z-1:-1]))):
-                for i in range(len(self.stock_data)):
+                for i in range(len(self.real_data)):
                     if self.stock_price[i] > self.mu[i]:
                         if self.x_test[z-2][i] == self.x_test[z-1][i] == self.x_test[z][i]== self.x_test[n+z][i] == False:
 
@@ -441,15 +442,15 @@ class Model():
         #### important!! adding one zero from the begining
         self.result = np.insert(self.result, 0, 0., axis=0)
         self.total = np.insert(self.total, 0, 0., axis=0)
-        dummy_3 = np.insert(dummy_3, 0, 0., axis=0)
-        dummy_4 = np.insert(dummy_4, 0, 0., axis=0)
+
 
 
         # to get c
         c, w = 0, 0
         for i in range(len(self.total)-1):
-            
-            if self.total[i] == real_data[i] and self.total[i]==True:
+
+            if self.total[i] == self.real_data[i] and self.total[i]==True:
                 c += 1
 
+        #self.total = np.insert(self.total, -1, 5., axis=0)
         return self.result, c, self.total

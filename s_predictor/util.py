@@ -124,7 +124,7 @@ class stock_util(object):
         return [correct, wrong]
 
 
-    def make_chart_plot(self, predict, real, correct_d):
+    def make_chart_plot(self, date, predict, real, correct_d):
 
         predict_dato = self.make_bool(predict[:-1])
         real_dato = self.make_bool(real)
@@ -158,9 +158,9 @@ class stock_util(object):
 
 
         if int(predict[-1]) == 0:
-            plt.xlabel("Next Market of Target Stock is Down")
+            plt.xlabel("When the marker will close: {}, Target Stock is Down".format(date))
         else:
-            plt.xlabel("Next Market of Target Stock is Up")
+            plt.xlabel("When the marker will close: {}, Target Stock is Up".format(date))
 
 
         plt.legend()
