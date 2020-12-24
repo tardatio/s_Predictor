@@ -158,10 +158,9 @@ class stock_util(object):
 
 
         if int(predict[-1]) == 0:
-            plt.xlabel("When the marker will close: {}, Target Stock is Down".format(date))
+            plt.xlabel("When the market in {} will close, Target Stock is Down".format(date))
         else:
-            plt.xlabel("When the marker will close: {}, Target Stock is Up".format(date))
-
+            plt.xlabel("When the market in {} will close, Target Stock is Up".format(date))
 
         plt.legend()
 
